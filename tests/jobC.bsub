@@ -1,0 +1,15 @@
+#BSUB -q rvmartin
+#BSUB -n 1
+#BSUB -R "rusage[mem=1G] span[hosts=1]"
+#BSUB -a 'docker(alpine)'
+#BSUB -J "JobC"
+#BSUB -o log-C.txt
+
+if cmp answer-A.txt answer-B.txt ; then 
+	rm answer-*.txt seed.txt log-[AB].txt
+	echo "0" > status-abc.txt 
+	exit 0
+else 
+	echo "1" > status-abc.txt 
+	exit 1
+fi

@@ -1,0 +1,8 @@
+#BSUB -q rvmartin
+#BSUB -n 1
+#BSUB -R "rusage[mem=1G] span[hosts=1]"
+#BSUB -a 'docker(alpine)'
+#BSUB -J "JobB"
+#BSUB -o log-B.txt
+
+sh -c 'RANDOM=$(cat seed.txt); echo $RANDOM > answer-B.txt'

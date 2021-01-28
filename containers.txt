@@ -1,0 +1,5 @@
+1: liambindle/nco
+2: registry.gsc.wustl.edu/sleong/base-engineering
+3: registry.gsc.wustl.edu/sleong/base-engineering-gcc
+4: geoschem/gcpy
+5: liambindle/my-python-environment:2020-05

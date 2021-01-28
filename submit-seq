@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function submit() {
+	bsub < $1 | sed -n 's/Job <\([0-9][0-9]*\)>.*/\1/p'
+}
+
+function submit_with_dep() {
+	bsub -w "done($2)" < $1 | sed -n 's/Job <\([0-9][0-9]*\)>.*/\1/p'
+}
+
+JOBID=$(submit $1)
+echo "Submitted $JOBID"
+shift
+
+while(($#)) ; do
+	JOBID=$(submit_with_dep $1 $JOBID)
+	echo "Submitted $JOBID"
+	shift
+done

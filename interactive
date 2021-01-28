@@ -1,0 +1,41 @@
+#!/bin/bash
+
+THIS_SCRIPTS_DIRECTORY=$(realpath $(dirname "$0"))
+
+if [[ "$*" == "-i" ]] ; then
+	read -p 'CORES (default=8): ' CORES
+	read -p 'MEM  (default=32): ' MEM 
+	cat $THIS_SCRIPTS_DIRECTORY/queues.txt
+	read -p 'QUEUE (default=1): ' QUEUE
+	cat $THIS_SCRIPTS_DIRECTORY/containers.txt
+	read -p "CONTAINER (default=1): " CONTAINER
+fi
+
+CORES=${CORES:=8}
+MEM=${MEM:=32}
+QUEUE=${QUEUE:=1}
+CONTAINER=${CONTAINER:=1}
+
+if [[ $QUEUE =~ ^[0-9]+$ ]]; then
+	QUEUE=$($THIS_SCRIPTS_DIRECTORY/get_entry $THIS_SCRIPTS_DIRECTORY/queues.txt $QUEUE)
+fi
+
+if [[ $CONTAINER =~ ^[0-9]+$ ]]; then
+	CONTAINER=$($THIS_SCRIPTS_DIRECTORY/get_entry $THIS_SCRIPTS_DIRECTORY/containers.txt $CONTAINER)
+fi
+
+JOB="""
+#BSUB -Is
+#BSUB -n ${CORES}
+#BSUB -R 'rusage[mem=${MEM}GB] span[hosts=1]'
+#BSUB -q ${QUEUE}
+#BSUB -a 'docker(${CONTAINER})'
+
+if which bash; then
+	bash
+else
+	sh
+fi
+"""
+
+echo "$JOB"
