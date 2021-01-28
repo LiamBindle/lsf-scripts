@@ -1,0 +1,4 @@
+#!/bin/bash
+THIS_SCRIPTS_DIRECTORY=$(realpath $(dirname "$0"))
+echo 'export PATH=$PATH:'$THIS_SCRIPTS_DIRECTORY > activate
+chmod +x activate
